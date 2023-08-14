@@ -1,37 +1,58 @@
 NAME		=	pipex
-LIBFT		=	libft/
-LIBFT_A		=	$(addprefix $(LIBFT), libft.a)
-
 CC			=	gcc
-RM			=	rm -f
-SRCS		=	pipex.c \
+FLAGS		=	-Wall -Wextra -Werror -g
+RM			=	rm -rf
 
-OBJS		=	$(SRCS:%.c=%.o)
+HEADER_SRCS	=	pipex.h pipex_bonus.h
+HEADER_DIR	=	includes/
+HEADER		=	$(addprefix $(HEADER_DIR), $(HEADER_SRCS))
+
+SPATH_SRCS	=	pipex.c childs.c err.c free.c
+SPATH_DIR	=	srcs/
+SPATH		=	$(addprefix $(SPATH_DIR), $(SPATH_SRCS))
+OBJ_S		=	$(SPATH:.c=.o)
+
+BPATH_SRCS	=	pipex_bonus.c err_bonus.c here_doc_bonus.c\
+				fds_bonus.c free_bonus.c child_bonus.c
+BPATH_DIR	=	srcs_bonus/
+BPATH		=	$(addprefix $(BPATH_DIR), $(BPATH_SRCS))
+OBJ_B		=	$(BPATH:.c=.o)
+
+LFT_SRCS	=	ft_strncmp.c ft_strdup.c ft_split.c ft_strjoin.c
+LFT_DIR	=	lft/
+LFT 		=	$(addprefix $(LFT_DIR), $(LFT_SRCS))\
+				gnl/get_next_line_utils.c gnl/get_next_line.c
+OBJ_LFT		=	$(LFT:.c=.o)
+
+%.o: %.c $(HEADER) Makefile
+				${CC} ${FLAGS} -c $< -o $@
+
+$(NAME):		$(OBJ_LFT) $(OBJ_S)
+				@$(CC) $(OBJ_LFT) $(OBJ_S) -o $(NAME)
+				@echo -e "$(GREEN)$(NAME) created!$(DEFAULT)"
 
 all:			$(NAME)
 
-$(NAME):		$(OBJS) $(LIBFT_A)
-				@$(CC) $(OBJS) -L$(LIBFT) -lft -o $(NAME)
-				@echo "Linked into executable \033[0;32mpipex\033[0m."
+bonus:			$(OBJ_LFT) $(OBJ_B)
+				$(CC) $(OBJ_LFT) $(OBJ_B) -o $(NAME)
+				@echo -e "$(GREEN)$(NAME) created!$(DEFAULT)"
 
-$(LIBFT_A):
-				@$(MAKE) -s -C $(LIBFT)
-				@echo "Compiled $(LIBFT_A)."
+clean:
+				@$(RM) $(OBJ_S)
+				@$(RM) $(OBJ_LFT)
+				@$(RM) $(OBJ_B)
+				@echo -e "$(YELLOW)object files deleted!$(DEFAULT)"
 
-localclean:
-				@$(RM) $(OBJS)
-				@echo "Removed object files."
-
-clean:			localclean
-				@$(MAKE) clean -s -C $(LIBFT)
-				@echo "Clean libft."
-
-fclean:			localclean
-				@$(MAKE) fclean -s -C $(LIBFT)
-				@echo "Full clean libft."	
+fclean:			clean
 				@$(RM) $(NAME)
-				@echo "Removed executable."
+				@echo -e "$(RED)all deleted!$(DEFAULT)"
 
 re:				fclean all
 
-.PHONY:			all clean fclean re localclean bonus
+.PHONY:		all clean fclean bonus re
+
+
+RED = \033[1;31m
+GREEN = \033[1;32m
+YELLOW = \033[1;33m
+DEFAULT = \033[0m
