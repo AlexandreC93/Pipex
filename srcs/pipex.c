@@ -6,13 +6,19 @@
 /*   By: lcadinot <lcadinot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/10 22:29:26 by lcadinot          #+#    #+#             */
-/*   Updated: 2023/08/14 18:44:23 by lcadinot         ###   ########.fr       */
+/*   Updated: 2023/08/14 19:30:16 by lcadinot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
 
-char	*find_path(char **envp)
+void	close_pipes(t_pipex *pipex)
+{
+	close(pipex->tube[0]);
+	close(pipex->tube[1]);
+}
+
+char	*find_path(char **envp, t_pipex *pipex)
 {
 	char	**tmp;
 
@@ -25,14 +31,13 @@ char	*find_path(char **envp)
 	if (*tmp == NULL)
 		envp = NULL;
 	if (!envp)
+	{
+		close(pipex->infile);
+		close(pipex->outfile);
+		close_pipes(pipex);
 		msg_err(ERR_ENVP);
+	}
 	return (*envp + 5);
-}
-
-void	close_pipes(t_pipex *pipex)
-{
-	close(pipex->tube[0]);
-	close(pipex->tube[1]);
 }
 
 int	main(int argc, char *argv[], char *envp[])
@@ -50,7 +55,7 @@ int	main(int argc, char *argv[], char *envp[])
 	if (pipe(pipex.tube) < 0)
 		return (close(pipex.infile), close(pipex.outfile),
 			msg_err(ERR_PIPE), 1);
-	pipex.paths = find_path(envp);
+	pipex.paths = find_path(envp, &pipex);
 	pipex.cmd_paths = ft_split(pipex.paths, ':');
 	pipex.pid1 = fork();
 	if (pipex.pid1 == 0)

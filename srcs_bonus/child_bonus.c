@@ -6,7 +6,7 @@
 /*   By: lcadinot <lcadinot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/10 22:30:02 by lcadinot          #+#    #+#             */
-/*   Updated: 2023/08/10 22:30:03 by lcadinot         ###   ########.fr       */
+/*   Updated: 2023/08/14 19:39:09 by lcadinot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ void	child(t_ppxb p, char **argv, char **envp)
 		{
 			msg_pipe(p.cmd_args[0]);
 			child_free(&p);
+			parent_free(&p);
 			exit(1);
 		}
 		execve(p.cmd, p.cmd_args, envp);

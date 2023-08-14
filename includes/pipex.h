@@ -6,7 +6,7 @@
 /*   By: lcadinot <lcadinot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/10 22:25:23 by lcadinot          #+#    #+#             */
-/*   Updated: 2023/08/11 17:46:35 by lcadinot         ###   ########.fr       */
+/*   Updated: 2023/08/14 19:33:48 by lcadinot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ void	first_child(t_pipex pipex, char *argv[], char *envp[]);
 void	second_child(t_pipex pipex, char *argv[], char *envp[]);
 
 void	parent_free(t_pipex *pipex);
+void	close_pipes(t_pipex *pipex);
 void	child_free(t_pipex *pipex);
 
 void	msg_err(char *err);
