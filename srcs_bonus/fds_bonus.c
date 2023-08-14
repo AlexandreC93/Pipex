@@ -6,7 +6,7 @@
 /*   By: lcadinot <lcadinot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/10 22:29:54 by lcadinot          #+#    #+#             */
-/*   Updated: 2023/08/11 18:03:15 by lcadinot         ###   ########.fr       */
+/*   Updated: 2023/08/14 19:43:29 by lcadinot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,5 +48,8 @@ void	get_out(char *argv, t_ppxb *pipex)
 	else
 		pipex->outfile = open(argv, O_CREAT | O_RDWR | O_TRUNC, 0000644);
 	if (pipex->outfile < 0)
+	{
+		close(pipex->infile);
 		msg_err(ERR_OUTFILE);
+	}
 }
